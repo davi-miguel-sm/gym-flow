@@ -102,12 +102,12 @@ Os serviços serão disponibilizados em:
 ```env
 # PostgreSQL
 POSTGRES_DB=fitnessapp
-POSTGRES_USER=admin
-POSTGRES_PASSWORD=admin123
+POSTGRES_USER={admin}
+POSTGRES_PASSWORD={admin123}
 
 # MinIO
-MINIO_ROOT_USER=admin
-MINIO_ROOT_PASSWORD=admin123
+MINIO_ROOT_USER={admin}
+MINIO_ROOT_PASSWORD={admin123}
 ```
 
 ### backend/.env ou application.yml (exemplo)
