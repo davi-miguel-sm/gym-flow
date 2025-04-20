@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.gymflow</groupId>
 	<artifactId>gf-programa-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT-rc1</version>
 	<name>gf-programa-api</name>
 	<description>APIs to supply data to gymflow&apos;s frontend.</description>
 	<url/>
@@ -36,7 +36,7 @@
 			<artifactId>spring-dotenv</artifactId>
 			<version>4.0.0</version>
 		</dependency>
-		<!-- Dependencia para ler o swagger -->
+		<!-- SpringDoc OpenAPI UI -->
 		<dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -80,6 +80,7 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Tratar Tokens JWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
@@ -98,7 +99,6 @@
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>

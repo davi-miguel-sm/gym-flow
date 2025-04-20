@@ -25,7 +25,7 @@ public class AuthController {
   }
 
   @RequestMapping("/register")
-  @Operation(summary = "Register a new user")
+  @Operation(summary = "{auth.register.summary}", description = "{auth.register.description}")
   public ResponseEntity<Void> register(@RequestBody RegisterRequest request) {
     authService.register(request);
 
@@ -33,7 +33,7 @@ public class AuthController {
   }
 
   @RequestMapping("/login")
-  @Operation(summary = "Logon a user")
+  @Operation(summary = "{auth.login.summary}", description = "{auth.login.description}")
   public ResponseEntity<LoginResponse> login(@RequestBody RegisterRequest request) {
     LoginResponse token = authService.login(request);
 
@@ -41,7 +41,7 @@ public class AuthController {
   }
 
   @RequestMapping("/me")
-  @Operation(summary = "Return the current user")
+  @Operation(summary = "{auth.me.summary}", description = "{auth.me.description}")
   public ResponseEntity<User> getAuthenticatedUser(@AuthenticationPrincipal User user) {
     return ResponseEntity.ok(user);
   }
