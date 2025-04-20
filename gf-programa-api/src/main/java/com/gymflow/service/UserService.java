@@ -1,8 +1,11 @@
 package com.gymflow.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gymflow.model.User;
 import com.gymflow.repository.UserRepository;
 
 @Service
@@ -14,7 +17,7 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public Integer getOne() {
-    return 1;
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 }
