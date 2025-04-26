@@ -1,6 +1,7 @@
 package com.gymflow.security;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request,
       HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
+
     String authHeader = request.getHeader("Authorization");
+    System.out.println(">>> Authorization header: " + authHeader);
 
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
       filterChain.doFilter(request, response);
@@ -53,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       if (userOpt.isPresent()) {
         User user = userOpt.get();
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            user, null, null // Adicionar roles depois??
+            user, null, List.of() // Add roles?
         );
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);

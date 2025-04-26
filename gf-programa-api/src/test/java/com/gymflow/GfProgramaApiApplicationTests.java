@@ -8,6 +8,6 @@ class GfProgramaApiApplicationTests {
 
 	@Test
 	void contextLoads() {
-		// Testa se o contexto da aplicação sobe sem erro
+		// This test will check if application is up
 	}
 }
