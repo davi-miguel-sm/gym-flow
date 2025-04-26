@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.gymflow.dto.LoginResponseDTO;
 import com.gymflow.dto.RegisterRequestDTO;
+import com.gymflow.exception.Errors;
 import com.gymflow.model.User;
 import com.gymflow.repository.UserRepository;
 
@@ -24,7 +25,7 @@ public class AuthService {
 
   public void register(RegisterRequestDTO request) {
     if (userRepository.existsByEmail(request.getEmail())) {
-      throw new RuntimeException("E-mail already exists.");
+      throw new Errors.ErrorEmailAlreadyExists();
     }
 
     User user = new User();
@@ -39,10 +40,10 @@ public class AuthService {
 
   public LoginResponseDTO login(RegisterRequestDTO request) {
     User user = userRepository.findByEmail(request.getEmail())
-        .orElseThrow(() -> new RuntimeException("User not found."));
+        .orElseThrow(() -> new Errors.ErrorUserNotFound());
 
     if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-      throw new RuntimeException("Incorrect Password");
+      throw new Errors.ErrorIncorrectPassword();
     }
 
     String token = jwtService.generateToken(user);
