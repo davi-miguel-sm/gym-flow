@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,6 @@ import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtService {
-  private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
 
   @Value("${jwt.secret}")
   private String secret;
@@ -54,8 +51,7 @@ public class JwtService {
           .parseClaimsJws(token)
           .getBody();
     } catch (JwtException e) {
-      logger.error("Token inválido ", e.getCause());
-      return null;
+      throw new JwtException("Token inválido", e.getCause());
     }
   }
 }

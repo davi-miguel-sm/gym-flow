@@ -13,6 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.gymflow.security.JwtAuthenticationFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 public class SecurityConfig {
 
@@ -37,6 +39,11 @@ public class SecurityConfig {
                 "/swagger-ui.html")
             .permitAll()
             .anyRequest().authenticated())
+        .exceptionHandling(exception -> exception
+            .authenticationEntryPoint((request, response, authException) -> response
+                .sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: Token missing or invalid"))
+            .accessDeniedHandler((request, response, accessDeniedException) -> response
+                .sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden: You don't have permission")))
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }

@@ -2,7 +2,7 @@ package com.gymflow.model;
 
 import java.util.UUID;
 
-import com.gymflow.Enums.Gender;
+import com.gymflow.enums.Gender;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

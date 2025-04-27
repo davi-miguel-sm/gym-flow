@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
   private final JwtService jwtService;
   private final UserRepository userRepository;
 
@@ -47,22 +48,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String token = authHeader.substring(7);
     Claims claims = jwtService.extractAllClaims(token);
 
-    if (claims != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      String email = claims.get("email", String.class);
+    if (claims == null) {
+      sendUnauthorizedResponse(response, "Invalid or expired token");
+      return;
+    }
 
+    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+      String email = claims.get("email", String.class);
       Optional<User> userOpt = userRepository.findByEmail(email);
 
-      if (userOpt.isPresent()) {
-        User user = userOpt.get();
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-            user, null, List.of() // Add roles?
-        );
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
+      if (userOpt.isEmpty()) {
+        sendUnauthorizedResponse(response, "User not found");
+        return;
       }
+
+      User user = userOpt.get();
+      UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+          user, null, List.of() // Add roles if needed
+      );
+      authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+      SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 
     filterChain.doFilter(request, response);
   }
 
+  private void sendUnauthorizedResponse(HttpServletResponse response, String message) throws IOException {
+    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
+  }
 }

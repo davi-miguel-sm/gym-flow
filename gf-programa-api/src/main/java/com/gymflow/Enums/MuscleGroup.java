@@ -1,4 +1,4 @@
-package com.gymflow.Enums;
+package com.gymflow.enums;
 
 public enum MuscleGroup {
   CHEST, TRAPS, LATS, LOWER_BACK, SHOULDERS, BICEPS,

@@ -1,12 +1,17 @@
 package com.gymflow.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExerciseDTO {
-  private String name;
+  private String id;
   private String muscleGroup;
-  private String description;
+  private String nameEn;
+  private String namePt;
+  private String descriptionEn;
+  private String descriptionPt;
 }

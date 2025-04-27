@@ -2,11 +2,12 @@ package com.gymflow.exception;
 
 public class Errors extends RuntimeException {
   private final String code;
+  private static final long serialVersionUID = 1L;
 
   /**
    * Create an error with a code and message.
    *
-   * @param code    unique idenfier of error (ex: "001")
+   * @param code    unique idenfier of error (ex: "000")
    * @param message description of error (ex: "User not found")
    */
 
@@ -41,4 +42,23 @@ public class Errors extends RuntimeException {
       super("003", "Incorrect password.");
     }
   }
+
+  public static class ExerciseNotFound extends Errors {
+    public ExerciseNotFound() {
+      super("004", "Exercise not found.");
+    }
+  }
+
+  public static class MuscleGroupNotFound extends Errors {
+    public MuscleGroupNotFound(String muscleGroup) {
+      super("005", "Muscle Group " + muscleGroup + " not found.");
+    }
+  }
+
+  public static class InvalidUUIDFormat extends Errors {
+    public InvalidUUIDFormat() {
+      super("006", "Invalid UUID format!");
+    }
+  }
+
 }

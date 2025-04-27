@@ -40,7 +40,7 @@ public class AuthService {
 
   public LoginResponseDTO login(RegisterRequestDTO request) {
     User user = userRepository.findByEmail(request.getEmail())
-        .orElseThrow(() -> new Errors.ErrorUserNotFound());
+        .orElseThrow(Errors.ErrorUserNotFound::new);
 
     if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
       throw new Errors.ErrorIncorrectPassword();
