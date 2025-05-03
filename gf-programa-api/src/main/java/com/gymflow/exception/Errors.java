@@ -61,4 +61,16 @@ public class Errors extends RuntimeException {
     }
   }
 
+  public static class NamePtAlreadyIncludes extends Errors {
+    public NamePtAlreadyIncludes() {
+      super("007", "A record with the same 'name_pt' already exists.");
+    }
+  }
+
+  public static class NameEnAlreadyIncludes extends Errors {
+    public NameEnAlreadyIncludes() {
+      super("008", "A record with the same 'name_en' already exists.");
+    }
+  }
+
 }

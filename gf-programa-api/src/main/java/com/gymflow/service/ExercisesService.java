@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gymflow.dto.CreateNewExerciseDTO;
 import com.gymflow.dto.ExerciseDTO;
 import com.gymflow.enums.MuscleGroup;
 import com.gymflow.exception.Errors;
@@ -52,10 +53,23 @@ public class ExercisesService {
     return exerciseMapper(exercise);
   }
 
+  public ExerciseDTO createExercise(CreateNewExerciseDTO exerciseDTO) {
+    Exercise exercise = new Exercise();
+
+    exercise.setMuscleGroup(parseMuscleGroup(exerciseDTO.getMuscleGroup()));
+    exercise.setDescriptionEn(exerciseDTO.getDescriptionEn());
+    exercise.setDescriptionPt(exerciseDTO.getDescriptionPt());
+    exercise.setNameEn(exerciseDTO.getNameEn());
+    exercise.setNamePt(exerciseDTO.getNamePt());
+
+    Exercise exerciseSaved = exerciseRepository.save(exercise);
+    return exerciseMapper(exerciseSaved);
+  }
+
   public ExerciseDTO exerciseMapper(Exercise exercise) {
     return new ExerciseDTO(
         exercise.getId().toString(),
-        exercise.getMuscleGroup().name(),
+        exercise.getMuscleGroup(),
         exercise.getNameEn(),
         exercise.getNamePt(),
         exercise.getDescriptionEn(),

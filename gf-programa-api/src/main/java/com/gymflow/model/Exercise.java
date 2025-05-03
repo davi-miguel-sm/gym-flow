@@ -2,12 +2,8 @@ package com.gymflow.model;
 
 import java.util.UUID;
 
-import com.gymflow.enums.MuscleGroup;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,9 +21,8 @@ public class Exercise {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "muscle_group", nullable = false, columnDefinition = "gym.muscle_group")
-  private MuscleGroup muscleGroup;
+  @Column(name = "muscle_group", nullable = false)
+  private String muscleGroup;
 
   @Column(name = "name_en", nullable = false)
   private String nameEn;
