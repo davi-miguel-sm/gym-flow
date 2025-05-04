@@ -137,9 +137,9 @@ minio:
 
 - [x] Project structure defined
 - [x] Container setup with PostgreSQL + MinIO
-- [ ] OAuth2 authentication and token-based security
-- [ ] Database modeling and relationships
-- [ ] Image upload endpoint implementation
+- [x] OAuth2 authentication and token-based security
+- [x] Database modeling and relationships
+- [x] Image upload endpoint implementation
 - [ ] Exercise selection UI with images/videos
 - [ ] Graphs and statistics for training history
 

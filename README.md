@@ -137,9 +137,9 @@ minio:
 
 - [x] Estrutura de pastas definida
 - [x] Setup inicial dos containers (PostgreSQL + MinIO)
-- [ ] Autenticação OAuth2 e integração de segurança
-- [ ] Modelagem completa do banco de dados
-- [ ] Implementação do endpoint para upload de imagens
+- [x] Autenticação OAuth2 e integração de segurança
+- [x] Modelagem completa do banco de dados
+- [x] Implementação do endpoint para upload de imagens
 - [ ] Tela de seleção de exercícios com imagens/vídeos
 - [ ] Registro e visualização dos treinos com gráficos
 
