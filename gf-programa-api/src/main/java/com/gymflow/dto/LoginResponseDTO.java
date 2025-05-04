@@ -3,10 +3,10 @@ package com.gymflow.dto;
 import lombok.Data;
 
 @Data
-public class LoginResponseDTO {
+public class LoginResponseDto {
   private String token;
 
-  public LoginResponseDTO(String token) {
+  public LoginResponseDto(String token) {
     this.token = token;
   }
 }

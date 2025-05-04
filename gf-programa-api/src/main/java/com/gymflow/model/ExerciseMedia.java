@@ -2,11 +2,8 @@ package com.gymflow.model;
 
 import java.util.UUID;
 
-import com.gymflow.enums.Gender;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -20,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "exercise_media", schema = "gym")
-public class ExercisesMedia {
+public class ExerciseMedia {
 
   @Id
   private UUID id;
@@ -29,11 +26,17 @@ public class ExercisesMedia {
   @JoinColumn(name = "exercise_id")
   private Exercise exercise;
 
-  @Enumerated(EnumType.STRING)
-  private Gender gender;
+  @Column(nullable = false)
+  private String gender;
 
+  @Column(nullable = false)
   private String imageUrl;
+
   private String videoUrl;
+
+  @Column(nullable = false)
   private Boolean isVideo;
+
+  @Column(nullable = false)
   private Integer orderIndex;
 }

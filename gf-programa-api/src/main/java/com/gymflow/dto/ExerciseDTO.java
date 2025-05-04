@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExerciseDTO {
+public class ExerciseDto {
   private String id;
   private String muscleGroup;
   private String nameEn;

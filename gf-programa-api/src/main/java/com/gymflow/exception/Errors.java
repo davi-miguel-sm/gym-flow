@@ -1,15 +1,10 @@
 package com.gymflow.exception;
 
+import java.util.UUID;
+
 public class Errors extends RuntimeException {
   private final String code;
   private static final long serialVersionUID = 1L;
-
-  /**
-   * Create an error with a code and message.
-   *
-   * @param code    unique idenfier of error (ex: "000")
-   * @param message description of error (ex: "User not found")
-   */
 
   public Errors(String code, String message) {
     super(message);
@@ -24,6 +19,8 @@ public class Errors extends RuntimeException {
   public String getCode() {
     return code;
   }
+
+  // --- Common App Errors ---
 
   public static class ErrorEmailAlreadyExists extends Errors {
     public ErrorEmailAlreadyExists() {
@@ -42,6 +39,8 @@ public class Errors extends RuntimeException {
       super("003", "Incorrect password.");
     }
   }
+
+  // --- Exercise-Related Errors ---
 
   public static class ExerciseNotFound extends Errors {
     public ExerciseNotFound() {
@@ -73,4 +72,27 @@ public class Errors extends RuntimeException {
     }
   }
 
+  public static class MediaUploadFailed extends Errors {
+    public MediaUploadFailed(String reason) {
+      super("009", "Failed to upload media: " + reason);
+    }
+  }
+
+  public static class MediaNotFound extends Errors {
+    public MediaNotFound(UUID exerciseId) {
+      super("010", "No media found for exercise ID: " + exerciseId);
+    }
+  }
+
+  public static class InvalidGender extends Errors {
+    public InvalidGender(String gender) {
+      super("011", "Invalid gender value: " + gender);
+    }
+  }
+
+  public static class UnexpectedError extends Errors {
+    public UnexpectedError(String message) {
+      super("999", "Unexpected error occurred: " + message);
+    }
+  }
 }

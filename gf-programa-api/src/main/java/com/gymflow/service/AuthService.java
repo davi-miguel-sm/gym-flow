@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.gymflow.dto.LoginResponseDTO;
-import com.gymflow.dto.RegisterRequestDTO;
+import com.gymflow.dto.LoginResponseDto;
+import com.gymflow.dto.RegisterRequestDto;
 import com.gymflow.exception.Errors;
 import com.gymflow.model.User;
 import com.gymflow.repository.UserRepository;
@@ -23,7 +23,7 @@ public class AuthService {
     this.jwtService = jwtService;
   }
 
-  public void register(RegisterRequestDTO request) {
+  public void register(RegisterRequestDto request) {
     if (userRepository.existsByEmail(request.getEmail())) {
       throw new Errors.ErrorEmailAlreadyExists();
     }
@@ -38,7 +38,7 @@ public class AuthService {
     userRepository.save(user);
   }
 
-  public LoginResponseDTO login(RegisterRequestDTO request) {
+  public LoginResponseDto login(RegisterRequestDto request) {
     User user = userRepository.findByEmail(request.getEmail())
         .orElseThrow(Errors.ErrorUserNotFound::new);
 
@@ -47,7 +47,7 @@ public class AuthService {
     }
 
     String token = jwtService.generateToken(user);
-    return new LoginResponseDTO(token);
+    return new LoginResponseDto(token);
   }
 
 }

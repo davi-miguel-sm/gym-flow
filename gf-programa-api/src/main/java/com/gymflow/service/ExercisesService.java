@@ -6,8 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gymflow.dto.CreateNewExerciseDTO;
-import com.gymflow.dto.ExerciseDTO;
+import com.gymflow.dto.CreateNewExerciseDto;
+import com.gymflow.dto.ExerciseDto;
 import com.gymflow.enums.MuscleGroup;
 import com.gymflow.exception.Errors;
 import com.gymflow.exception.Errors.MuscleGroupNotFound;
@@ -24,7 +24,7 @@ public class ExercisesService {
     this.exerciseRepository = exerciseRepository;
   }
 
-  public List<ExerciseDTO> getAllExercises() {
+  public List<ExerciseDto> getAllExercises() {
     List<Exercise> exercises = exerciseRepository.findAll();
 
     return exercises.stream()
@@ -32,7 +32,7 @@ public class ExercisesService {
         .toList();
   }
 
-  public List<ExerciseDTO> getByMuscleGroup(String muscleGroup) {
+  public List<ExerciseDto> getByMuscleGroup(String muscleGroup) {
 
     String parsedMuscleGroup = parseMuscleGroup(muscleGroup);
     List<Exercise> exercises = exerciseRepository.findByMuscleGroup(parsedMuscleGroup);
@@ -46,28 +46,28 @@ public class ExercisesService {
         .toList();
   }
 
-  public ExerciseDTO getExerciseById(UUID id) {
+  public ExerciseDto getExerciseById(UUID id) {
     Exercise exercise = exerciseRepository.findById(id)
         .orElseThrow(Errors.ExerciseNotFound::new);
 
     return exerciseMapper(exercise);
   }
 
-  public ExerciseDTO createExercise(CreateNewExerciseDTO exerciseDTO) {
+  public ExerciseDto createExercise(CreateNewExerciseDto exerciseDto) {
     Exercise exercise = new Exercise();
 
-    exercise.setMuscleGroup(parseMuscleGroup(exerciseDTO.getMuscleGroup()));
-    exercise.setDescriptionEn(exerciseDTO.getDescriptionEn());
-    exercise.setDescriptionPt(exerciseDTO.getDescriptionPt());
-    exercise.setNameEn(exerciseDTO.getNameEn());
-    exercise.setNamePt(exerciseDTO.getNamePt());
+    exercise.setMuscleGroup(parseMuscleGroup(exerciseDto.getMuscleGroup()));
+    exercise.setDescriptionEn(exerciseDto.getDescriptionEn());
+    exercise.setDescriptionPt(exerciseDto.getDescriptionPt());
+    exercise.setNameEn(exerciseDto.getNameEn());
+    exercise.setNamePt(exerciseDto.getNamePt());
 
     Exercise exerciseSaved = exerciseRepository.save(exercise);
     return exerciseMapper(exerciseSaved);
   }
 
-  public ExerciseDTO exerciseMapper(Exercise exercise) {
-    return new ExerciseDTO(
+  public ExerciseDto exerciseMapper(Exercise exercise) {
+    return new ExerciseDto(
         exercise.getId().toString(),
         exercise.getMuscleGroup(),
         exercise.getNameEn(),
