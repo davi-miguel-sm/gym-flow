@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -20,6 +22,7 @@ import lombok.NoArgsConstructor;
 public class ExerciseMedia {
 
   @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
   @ManyToOne
@@ -30,9 +33,7 @@ public class ExerciseMedia {
   private String gender;
 
   @Column(nullable = false)
-  private String imageUrl;
-
-  private String videoUrl;
+  private String fileUrl;
 
   @Column(nullable = false)
   private Boolean isVideo;

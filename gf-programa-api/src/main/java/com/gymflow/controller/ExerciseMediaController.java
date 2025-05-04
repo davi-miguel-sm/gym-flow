@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gymflow.dto.CreateMediaDto;
+import com.gymflow.dto.MediaDto;
 import com.gymflow.service.ExerciseMediaService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,10 +31,10 @@ public class ExerciseMediaController {
 
   @GetMapping("/{id}")
   @Operation(summary = "{exercises.getMediaOfAnExercise.summary}", description = "{exercises.getMediaOfAnExercise.description}")
-  public ResponseEntity<List<String>> getMediasOfAnExercise(@PathVariable UUID id) {
+  public ResponseEntity<List<MediaDto>> getMediasOfAnExercise(@PathVariable UUID id) {
 
-    List<String> mediaUrls = exerciseMediaService.listMediaOrdered(id);
-    return ResponseEntity.ok(mediaUrls);
+    List<MediaDto> medias = exerciseMediaService.listMediaOrdered(id);
+    return ResponseEntity.ok(medias);
 
   }
 

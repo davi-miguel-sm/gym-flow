@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.gymflow.dto.CreateMediaDto;
+import com.gymflow.dto.MediaDto;
 import com.gymflow.enums.Gender;
 import com.gymflow.exception.Errors;
 import com.gymflow.model.Exercise;
@@ -62,12 +63,13 @@ public class ExerciseMediaService {
       ExerciseMedia media = new ExerciseMedia();
       media.setExercise(exercise);
       media.setGender(gender.name());
-      media.setOrderIndex(null);
+      media.setOrderIndex(dto.getOrderIndex());
       if (Boolean.TRUE.equals(dto.getIsVideo())) {
         media.setIsVideo(true);
-        media.setVideoUrl(savedUrl);
+        media.setFileUrl(savedUrl);
       } else {
-        media.setImageUrl(savedUrl);
+        media.setIsVideo(false);
+        media.setFileUrl(savedUrl);
       }
 
       exercisesMediaRepository.save(media);
@@ -81,14 +83,21 @@ public class ExerciseMediaService {
     }
   }
 
-  public List<String> listMediaOrdered(UUID exerciseId) {
+  public List<MediaDto> listMediaOrdered(UUID exerciseId) {
     List<ExerciseMedia> medias = exercisesMediaRepository.findByExerciseIdOrderByOrderIndexAsc(exerciseId);
 
     if (medias.isEmpty()) {
       throw new Errors.MediaNotFound(exerciseId);
     }
 
-    return medias.stream()
-        .map(media -> Boolean.TRUE.equals(media.getIsVideo()) ? media.getVideoUrl() : media.getImageUrl()).toList();
+    return medias.stream().map(media -> new MediaDto(
+        media.getId(),
+        media.getFileUrl(),
+        media.getIsVideo(),
+        media.getOrderIndex(),
+        media.getExercise().getNamePt(),
+        media.getExercise().getNameEn(),
+        media.getExercise().getMuscleGroup()))
+        .toList();
   }
 }
