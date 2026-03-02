@@ -94,5 +94,10 @@ public class Errors extends RuntimeException {
     public UnexpectedError(String message) {
       super("999", "Unexpected error occurred: " + message);
     }
+
+    public UnexpectedError(String message, Exception cause) {
+      super("999", "Unexpected error occurred: " + message, cause);
+    }
   }
+
 }

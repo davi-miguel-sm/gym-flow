@@ -14,6 +14,8 @@ import com.gymflow.exception.Errors.MuscleGroupNotFound;
 import com.gymflow.model.Exercise;
 import com.gymflow.repository.ExerciseRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ExercisesService {
 
@@ -53,6 +55,7 @@ public class ExercisesService {
     return exerciseMapper(exercise);
   }
 
+  @Transactional
   public ExerciseDto createExercise(CreateNewExerciseDto exerciseDto) {
     Exercise exercise = new Exercise();
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gymflow.dto.LoginRequestDto;
 import com.gymflow.dto.LoginResponseDto;
 import com.gymflow.dto.RegisterRequestDto;
 import com.gymflow.model.User;
@@ -36,7 +37,7 @@ public class AuthController {
 
   @PostMapping("/login")
   @Operation(summary = "{auth.login.summary}", description = "{auth.login.description}")
-  public ResponseEntity<LoginResponseDto> login(@RequestBody RegisterRequestDto request) {
+  public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto request) {
     LoginResponseDto token = authService.login(request);
 
     return ResponseEntity.ok(token);

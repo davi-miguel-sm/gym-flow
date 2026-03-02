@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.gymflow.dto.CreateMediaDto;
@@ -16,65 +15,52 @@ import com.gymflow.model.ExerciseMedia;
 import com.gymflow.repository.ExerciseMediaRepository;
 import com.gymflow.repository.ExerciseRepository;
 
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.http.Method;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ExerciseMediaService {
 
-  private final MinioClient minioClient;
+  private final StorageService storage;
   private final ExerciseRepository exerciseRepository;
   private final ExerciseMediaRepository exercisesMediaRepository;
 
-  @Value("${minio.bucket}")
-  private String bucket;
-
-  public ExerciseMediaService(MinioClient minioClient, ExerciseRepository exerciseRepository,
+  public ExerciseMediaService(
+      StorageService storage,
+      ExerciseRepository exerciseRepository,
       ExerciseMediaRepository mediaRepo) {
-    this.minioClient = minioClient;
+    this.storage = storage;
     this.exerciseRepository = exerciseRepository;
     this.exercisesMediaRepository = mediaRepo;
   }
 
+  @Transactional
   public String uploadMedia(UUID exerciseId, CreateMediaDto dto) {
     Gender gender = Gender.fromString(dto.getGender());
+
     Exercise exercise = exerciseRepository.findById(exerciseId)
         .orElseThrow(Errors.ExerciseNotFound::new);
 
     try {
-      String objectName = exerciseId + "/" + UUID.randomUUID() + "_" + dto.getFile().getOriginalFilename();
-      minioClient.putObject(
-          PutObjectArgs.builder()
-              .bucket(bucket)
-              .object(objectName)
-              .stream(dto.getFile().getInputStream(), dto.getFile().getSize(), -1)
-              .contentType(dto.getFile().getContentType())
-              .build());
+      storage.ensureExercisePaths(exercise.getMuscleGroup(), exerciseId);
 
-      String savedUrl = minioClient.getPresignedObjectUrl(
-          GetPresignedObjectUrlArgs.builder()
-              .method(Method.GET)
-              .bucket(bucket)
-              .object(objectName)
-              .build());
+      String objectName = storage.uploadExerciseMedia(
+          exercise.getMuscleGroup(),
+          exerciseId,
+          gender.name().toLowerCase(),
+          dto.getFile().getInputStream(),
+          dto.getFile().getSize(),
+          dto.getFile().getContentType());
 
       ExerciseMedia media = new ExerciseMedia();
       media.setExercise(exercise);
-      media.setGender(gender.name());
+      media.setGender(gender.toString());
       media.setOrderIndex(dto.getOrderIndex());
-      if (Boolean.TRUE.equals(dto.getIsVideo())) {
-        media.setIsVideo(true);
-        media.setFileUrl(savedUrl);
-      } else {
-        media.setIsVideo(false);
-        media.setFileUrl(savedUrl);
-      }
+      media.setIsVideo(Boolean.TRUE.equals(dto.getIsVideo()));
+      media.setFileUrl(objectName);
 
       exercisesMediaRepository.save(media);
 
-      return savedUrl;
+      return storage.getPresignedGetUrl(objectName);
 
     } catch (IOException e) {
       throw new Errors.MediaUploadFailed("I/O error: " + e.getMessage());
@@ -90,14 +76,17 @@ public class ExerciseMediaService {
       throw new Errors.MediaNotFound(exerciseId);
     }
 
-    return medias.stream().map(media -> new MediaDto(
-        media.getId(),
-        media.getFileUrl(),
-        media.getIsVideo(),
-        media.getOrderIndex(),
-        media.getExercise().getNamePt(),
-        media.getExercise().getNameEn(),
-        media.getExercise().getMuscleGroup()))
-        .toList();
+    return medias.stream().map(media -> {
+      String url = storage.getPresignedGetUrl(media.getFileUrl());
+
+      return new MediaDto(
+          media.getId(),
+          url,
+          media.getIsVideo(),
+          media.getOrderIndex(),
+          media.getExercise().getNamePt(),
+          media.getExercise().getNameEn(),
+          media.getExercise().getMuscleGroup());
+    }).toList();
   }
 }

@@ -13,4 +13,5 @@ public class RegisterRequestDto {
   private String password;
   private String bio;
   private String profilePic;
+  private String role;
 }

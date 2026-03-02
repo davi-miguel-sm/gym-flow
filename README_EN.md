@@ -1,6 +1,6 @@
 # 💪 Gym Flow — Strength Progress Tracker
 
-A mobile application to track daily workout loads, select exercises based on muscle groups, and visualize your strength progress over time with clear and intuitive charts. Perfect for users who want to document their gym journey and follow their training evolution closely.
+A Web application to track daily workout loads, select exercises based on muscle groups, and visualize your strength progress over time with clear and intuitive charts. Perfect for users who want to document their gym journey and follow their training evolution closely.
 
 ---
 
@@ -9,7 +9,7 @@ A mobile application to track daily workout loads, select exercises based on mus
 ```
 app-fitness/
 ├── backend/         → REST API built with Java (Spring Boot)
-├── frontend/        → Mobile app built with React Native
+├── frontend/        → Web app built with TypeScript (Angular)
 ├── containers/      → Infrastructure (Docker Compose: PostgreSQL + MinIO)
 └── README.md        → Project documentation
 ```
@@ -30,7 +30,7 @@ app-fitness/
 
 | Layer          | Technology              |
 | -------------- | ----------------------- |
-| Frontend       | React Native            |
+| Frontend       | Angular                 |
 | Backend        | Java + Spring Boot      |
 | Database       | PostgreSQL              |
 | Storage        | MinIO (S3-compatible)   |

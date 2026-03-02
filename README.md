@@ -1,6 +1,6 @@
 # 💪 Gym Flow — Diário de Cargas
 
-Aplicativo mobile para acompanhamento de treinos com foco em **registro diário de cargas**, **seleção de exercícios por grupo muscular** e **visualização da progressão** através de gráficos. Ideal para quem deseja monitorar sua evolução na academia de forma prática e detalhada.
+Aplicativo Web para acompanhamento de treinos com foco em **registro diário de cargas**, **seleção de exercícios por grupo muscular** e **visualização da progressão** através de gráficos. Ideal para quem deseja monitorar sua evolução na academia de forma prática e detalhada.
 
 ---
 
@@ -9,7 +9,7 @@ Aplicativo mobile para acompanhamento de treinos com foco em **registro diário 
 ```
 app-fitness/
 ├── backend/         → API REST em Java (Spring Boot)
-├── frontend/        → Aplicativo mobile em React Native
+├── frontend/        → Aplicação Web em TypeScript (Angular)
 ├── containers/      → Infraestrutura (Docker Compose: PostgreSQL + MinIO)
 └── README.md        → Documentação do projeto
 ```
@@ -30,7 +30,7 @@ app-fitness/
 
 | Camada         | Tecnologia                  |
 | -------------- | --------------------------- |
-| Frontend       | React Native                |
+| Frontend       | Angular                     |
 | Backend        | Java + Spring Boot          |
 | Banco de Dados | PostgreSQL                  |
 | Armazenamento  | MinIO (S3 local compatível) |
