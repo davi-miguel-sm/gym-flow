@@ -1,7 +1,7 @@
 package com.gymflow.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import com.gymflow.enums.Role;
@@ -42,6 +42,6 @@ public class User implements Serializable {
   private Role role;
 
   @Column(name = "created_at", insertable = false, updatable = false)
-  private LocalDateTime createdAt;
+  private Instant createdAt;
 
 }

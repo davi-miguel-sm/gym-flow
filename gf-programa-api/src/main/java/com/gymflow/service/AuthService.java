@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.gymflow.dto.LoginRequestDto;
 import com.gymflow.dto.LoginResponseDto;
+import com.gymflow.dto.RefreshRequestDto;
 import com.gymflow.dto.RegisterRequestDto;
 import com.gymflow.enums.Role;
 import com.gymflow.exception.Errors;
@@ -59,8 +60,28 @@ public class AuthService {
       throw new Errors.ErrorIncorrectPassword();
     }
 
-    String token = jwtService.generateToken(user.get());
-    return new LoginResponseDto(token);
+    String accessToken = jwtService.generateAccessToken(user.get());
+    String refreshToken = jwtService.generateRefreshToken(user.get());
+    return new LoginResponseDto(accessToken, refreshToken);
+  }
+
+  public LoginResponseDto refreshToken(RefreshRequestDto request) {
+
+    String refreshToken = request.getRefreshToken();
+
+    if (!jwtService.validateRefreshToken(refreshToken)) {
+      throw new RuntimeException("Refresh token inválido");
+    }
+
+    String username = jwtService.extractUsernameFromRefreshToken(refreshToken);
+
+    User user = userRepository.findByUsername(username)
+        .orElseThrow();
+
+    String newAccessToken = jwtService.generateAccessToken(user);
+    String newRefreshToken = jwtService.generateRefreshToken(user);
+
+    return new LoginResponseDto(newAccessToken, newRefreshToken);
   }
 
 }

@@ -21,15 +21,23 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-  @Value("${jwt.secret}")
-  private String secret;
+  @Value("${jwt.accessSecret}")
+  private String accessSecret;
 
-  private Key getSigninKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(secret);
+  @Value("${jwt.refreshSecret}")
+  private String refreshSecret;
+
+  protected Key getAccessKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(accessSecret);
     return Keys.hmacShaKeyFor(keyBytes);
   }
 
-  public String generateToken(User user) {
+  protected Key getRefreshKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(refreshSecret);
+    return Keys.hmacShaKeyFor(keyBytes);
+  }
+
+  public String generateAccessToken(User user) {
     Map<String, Object> claims = new HashMap<>();
     claims.put("userId", user.getId());
     claims.put("email", user.getEmail());
@@ -39,20 +47,61 @@ public class JwtService {
         .setClaims(claims)
         .setSubject(user.getUsername())
         .setIssuedAt(new Date())
-        .setExpiration(Date.from(Instant.now().plusSeconds(3600)))
-        .signWith(getSigninKey(), SignatureAlgorithm.HS256)
+        .setExpiration(Date.from(Instant.now().plusSeconds(900)))
+        .signWith(getAccessKey(), SignatureAlgorithm.HS256)
         .compact();
   }
 
+  public String generateRefreshToken(User user) {
+
+    return Jwts.builder()
+        .setSubject(user.getUsername())
+        .setIssuedAt(new Date())
+        .setExpiration(Date.from(Instant.now().plusSeconds(86400)))
+        .signWith(getRefreshKey(), SignatureAlgorithm.HS256)
+        .compact();
+  }
+
+  public String extractUsername(String token) {
+    return extractAllClaims(token).getSubject();
+  }
+
   public Claims extractAllClaims(String token) {
+
     try {
       return Jwts.parserBuilder()
-          .setSigningKey(getSigninKey())
+          .setSigningKey(getAccessKey())
           .build()
           .parseClaimsJws(token)
           .getBody();
+
     } catch (JwtException e) {
-      throw new JwtException("Token inválido", e.getCause());
+      throw new JwtException("Token inválido");
     }
   }
+
+  public boolean validateRefreshToken(String token) {
+    try {
+      Jwts.parserBuilder()
+          .setSigningKey(getRefreshKey())
+          .build()
+          .parseClaimsJws(token);
+
+      return true;
+
+    } catch (JwtException e) {
+      return false;
+    }
+  }
+
+  public String extractUsernameFromRefreshToken(String token) {
+
+    return Jwts.parserBuilder()
+        .setSigningKey(getRefreshKey())
+        .build()
+        .parseClaimsJws(token)
+        .getBody()
+        .getSubject();
+  }
+
 }
